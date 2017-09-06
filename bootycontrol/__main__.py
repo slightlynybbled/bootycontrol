@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 class Application(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title('booty')
+        self.title('bootyControl')
 
         # local variables
         self.hex_file_path = ''
@@ -141,3 +141,6 @@ class Application(tk.Tk):
 
 def main():
     app = Application()
+
+if __name__ == '__main__':
+    main()
