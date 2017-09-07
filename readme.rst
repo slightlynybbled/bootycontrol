@@ -30,8 +30,10 @@ doesn't run, then a contribution would be welcome.
 Screenshots
 ====================
 
-A couple of screenshots for loading and verifying.
+Loading
 
-    ..image:: https://github.com/slightlynybbled/bootycontrol/blob/master/doc/img/loading.png?raw=true
+    .. image:: https://github.com/slightlynybbled/bootycontrol/blob/master/doc/img/loading.png?raw=true
 
-    ..image:: https://github.com/slightlynybbled/bootycontrol/blob/master/doc/img/verifying.png?raw=true
+Verifying
+
+    .. image:: https://github.com/slightlynybbled/bootycontrol/blob/master/doc/img/verify.png?raw=true
