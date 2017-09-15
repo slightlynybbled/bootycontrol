@@ -6,7 +6,7 @@ from io import StringIO
 
 import serial.tools.list_ports as list_ports
 from tk_tools import SmartOptionMenu
-from booty.util import create_serial_port, create_blt, load_hex, verify_hex
+from booty.util import create_serial_port, create_blt, erase_device, load_hex, verify_hex
 
 
 logger = logging.getLogger('bootycontrol')
@@ -50,16 +50,19 @@ class Application(tk.Tk):
         self.choose_hex_btn = tk.Button(self, text='Choose hex file...', command=self.choose_hex_file)
         self.choose_hex_btn.grid(row=3, column=0, columnspan=2, sticky='news')
 
+        self.erase_btn = tk.Button(self, text="Erase Device", command=self.erase_device)
+        self.erase_btn.grid(row=4, column=0, columnspan=2, sticky='news')
+
         self.load_btn = tk.Button(self, text="Load Device", command=self.load_device)
-        self.load_btn.grid(row=4, column=0, columnspan=2, sticky='news')
+        self.load_btn.grid(row=5, column=0, columnspan=2, sticky='news')
         self.load_btn['state'] = 'disabled'
 
         self.verify_btn = tk.Button(self, text="Verify Device", command=self.verify_device)
-        self.verify_btn.grid(row=5, column=0, columnspan=2, sticky='news')
+        self.verify_btn.grid(row=6, column=0, columnspan=2, sticky='news')
         self.verify_btn['state'] = 'disabled'
 
         self.console_text = tk.Text(self)
-        self.console_text.grid(row=6, column=0, columnspan=2, sticky='news')
+        self.console_text.grid(row=7, column=0, columnspan=2, sticky='news')
         self.console_text['state'] = 'disabled'
 
         self.mainloop()
@@ -81,6 +84,26 @@ class Application(tk.Tk):
             self.load_btn['state'] = 'normal'
             self.verify_btn['state'] = 'normal'
 
+    def erase_device(self):
+        baudrate = int(self.ser_baud_entry.get())
+        sp = create_serial_port(self.port_name, baudrate)
+        blt = create_blt(sp)
+
+        self.update_console(clear=True)
+
+        # allow time for threads and hardware to spin up
+        time.sleep(0.5)
+
+        self.update_console('loading...')
+        if erase_device(blt):
+            self.update_console('device erased!')
+        else:
+            self.update_console('device erase failed')
+
+        blt.end_thread()
+        time.sleep(0.01)
+        sp.close()
+
     def load_device(self):
         baudrate = int(self.ser_baud_entry.get())
         sp = create_serial_port(self.port_name, baudrate)
@@ -89,6 +112,7 @@ class Application(tk.Tk):
         self.update_console(clear=True)
 
         # allow time for threads and hardware to spin up
+
         time.sleep(0.5)
 
         self.update_console('loading...')
